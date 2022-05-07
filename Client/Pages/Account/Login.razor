@@ -1,6 +1,30 @@
 ﻿@page "/Account/Login"
+@inject NavigationManager NavigationManager
+@inject IAccountService AccountService
+
 <h3>Login</h3>
 
+<EditForm Model="_user" OnValidSubmit="HandleRegistration">
+    <DataAnnotationsValidator/>
+    <div class="form-label">
+        <label for="username" class="required">Username</label>
+        <InputText id="username" @bind-Value="_user.Username" class="form-control"/>
+    </div>
+    <div class="form-label">
+        <label for="password" class="required">Password</label>
+        <InputText id="password" @bind-Value="_user.Password" class="form-control" type="password"/>
+    </div>
+    <ValidationSummary/>
+    <br/>
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
 @code {
-    
+    readonly ClientLoginAccountModel _user = new();
+
+    async void HandleRegistration()
+    {
+        await AccountService.LoginUser(_user);
+        NavigationManager.NavigateTo("/");
+    }
 }

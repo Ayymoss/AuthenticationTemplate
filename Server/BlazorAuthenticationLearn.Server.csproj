@@ -22,5 +22,10 @@
     <ProjectReference Include="..\Shared\BlazorAuthenticationLearn.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations" />
+    <Folder Include="Services" />
+  </ItemGroup>
+
 
 </Project>

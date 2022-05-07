@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Shared\BlazorAuthenticationLearn.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data" />
+  </ItemGroup>
+
 </Project>
