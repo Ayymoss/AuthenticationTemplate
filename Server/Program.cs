@@ -1,7 +1,17 @@
+using BlazorAuthenticationLearn.Server;
 using BlazorAuthenticationLearn.Server.Data;
 using BlazorAuthenticationLearn.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
+// TODO: Add Password Reset form
+
+var databaseEnvironment = Environment.GetEnvironmentVariable("PostgreSQLDBConnection");
+
+if (databaseEnvironment == null)
+{
+    DatabaseConfiguration.DatabaseInit();
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +21,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 // Custom Services
-builder.Services.AddDbContext<PostgresqlDataContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddDbContext<PostgresqlDataContext>(options => { options.UseNpgsql(databaseEnvironment); });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<PostgresqlDataContext>();
 builder.Services.ConfigureApplicationCookie(options =>

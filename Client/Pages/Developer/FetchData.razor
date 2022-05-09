@@ -1,7 +1,7 @@
 ﻿@page "/Developer"
 @inject HttpClient Client
 @inject IJSRuntime Js
-@attribute [Authorize(Roles = nameof(GlobalRoles.SuperAdmin))]
+@attribute [Authorize(Roles = nameof(RoleName.SuperAdmin))]
 
 <h3>Developers</h3>
 <small>Add as many developers as you wish.</small>

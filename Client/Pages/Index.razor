@@ -26,9 +26,9 @@
         var authState = await AuthenticationState;
         if (authState != null)
         {
-            _role = authState.User.IsInRole(nameof(GlobalRoles.SuperAdmin)) 
-                ? nameof(GlobalRoles.SuperAdmin).ToLower() 
-                : nameof(GlobalRoles.User).ToLower();
+            _role = authState.User.IsInRole(nameof(RoleName.SuperAdmin)) 
+                ? nameof(RoleName.SuperAdmin).ToLower() 
+                : nameof(RoleName.User).ToLower();
         }
     }
 

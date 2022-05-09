@@ -1,5 +1,7 @@
 ﻿using BlazorAuthenticationLearn.Server.Data;
+using BlazorAuthenticationLearn.Shared;
 using BlazorAuthenticationLearn.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,21 +19,21 @@ public class DeveloperController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<ActionResult<List<Developer>>> Get()
     {
         var devs = await _context.Developers.ToListAsync();
         return Ok(devs);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<ActionResult<Developer>> Get(int id)
     {
         var dev = await _context.Developers.FirstOrDefaultAsync(a => a.Id == id);
         return Ok(dev);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(Developer developer)
+    public async Task<ActionResult<int>> Post(Developer developer)
     {
         _context.Add(developer);
         await _context.SaveChangesAsync();
@@ -39,6 +41,7 @@ public class DeveloperController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = nameof(RoleName.SuperAdmin))]
     public async Task<IActionResult> Put(Developer developer)
     {
         _context.Entry(developer).State = EntityState.Modified;
@@ -47,6 +50,7 @@ public class DeveloperController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = nameof(RoleName.SuperAdmin))]
     public async Task<IActionResult> Delete(int id)
     {
         var dev = new Developer {Id = id};
