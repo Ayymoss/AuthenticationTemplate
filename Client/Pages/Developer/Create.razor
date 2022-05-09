@@ -1,0 +1,19 @@
+﻿@page "/Developer/Create"
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+@attribute [Authorize(Roles = nameof(GlobalRoles.SuperAdmin))]
+
+<h3>Create</h3>
+
+<Form ButtonText="Create Developer" Dev="@_dev" OnValidSubmit="CreateDeveloper"></Form>
+
+@code {
+    readonly Developer _dev = new();
+
+    async Task CreateDeveloper()
+    {
+        await Http.PostAsJsonAsync("api/Developer", _dev);
+        UriHelper.NavigateTo("Developer");
+    }
+
+}

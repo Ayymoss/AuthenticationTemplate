@@ -1,0 +1,45 @@
+﻿<EditForm Model="Dev" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator/>
+
+    <div class="form-group">
+        <label>First Name</label>
+        <InputText class="form-control" @bind-Value="Dev.FirstName"/>
+        <ValidationMessage For="() => Dev.FirstName"/>
+    </div>
+    <br/>
+    <div class="form-group ">
+        <label>Last Name</label>
+        <InputText class="form-control" @bind-Value="Dev.LastName"/>
+        <ValidationMessage For="() => Dev.LastName"/>
+    </div>
+    <br/>
+    <div class="form-group ">
+        <label>Email</label>
+        <InputText class="form-control" @bind-Value="Dev.Email"/>
+        <ValidationMessage For="() => Dev.Email"/>
+    </div>
+    <br/>
+    <div class="form-group ">
+        <label>Experience</label>
+        <InputNumber class="form-control" @bind-Value="Dev.Experience"/>
+        <ValidationMessage For="() => Dev.Experience"/>
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public Developer Dev { get; set; }
+
+    [Parameter]
+    public string ButtonText { get; set; } = "Save";
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+}

@@ -22,12 +22,24 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Users/Amos/RiderProjects/_Other/BlazorAuthenticationLearn/Client/Pages/Account/Logout.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxMb2dvdXQucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/Users/Amos/RiderProjects/_Other/BlazorAuthenticationLearn/Client/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Users/Amos/RiderProjects/_Other/BlazorAuthenticationLearn/Client/Pages/Developer/Create.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGV2ZWxvcGVyXENyZWF0ZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Users/Amos/RiderProjects/_Other/BlazorAuthenticationLearn/Client/Pages/Developer/Edit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGV2ZWxvcGVyXEVkaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Users/Amos/RiderProjects/_Other/BlazorAuthenticationLearn/Client/Pages/Developer/FetchData.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGV2ZWxvcGVyXEZldGNoRGF0YS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Users/Amos/RiderProjects/_Other/BlazorAuthenticationLearn/Client/Pages/Developer/Form.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGV2ZWxvcGVyXEZvcm0ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Users/Amos/RiderProjects/_Other/BlazorAuthenticationLearn/Client/Pages/FetchData.razor]

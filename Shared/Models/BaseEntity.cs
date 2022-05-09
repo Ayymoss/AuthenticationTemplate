@@ -1,7 +1,6 @@
 ﻿namespace BlazorAuthenticationLearn.Shared.Models;
 
-public class ClientGlobalAccountModel
+public abstract class BaseEntity
 {
     public int Id { get; set; }
-    public string Username { get; set; }
 }

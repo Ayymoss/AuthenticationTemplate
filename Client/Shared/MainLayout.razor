@@ -1,15 +1,28 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject CustomStateProvider AuthStateProvider
+@inject IJSRuntime Js
 
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <NavMenu/>
     </div>
 
     <main>
         <div class="top-row px-4">
-            <a href="/Account/Register">Register</a>
-            <a href="/Account/Login">Login</a>
-            <a href="/Account/Logout">Logout</a>
+            <AuthorizeView>
+                <Authorized>
+                    <button @onclick="LogoutClick" class="btn btn-danger">Logout</button>
+                </Authorized>
+                <NotAuthorized>
+                    <div style="margin-right: 10px">
+                        <button @onclick="LoginClick" class="btn btn-primary">Login</button>
+                    </div>
+                    <div>
+                        <button @onclick="RegisterClick" class="btn btn-secondary">Register</button>
+                    </div>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
 
         <article class="content px-4">
@@ -17,3 +30,29 @@
         </article>
     </main>
 </div>
+
+@functions{
+
+    [CascadingParameter]
+    Task<AuthenticationState> AuthenticationState { get; set; }
+    
+    async Task LogoutClick()
+    {
+        if (await Js.InvokeAsync<bool>("confirm", "Are you sure you want to sign out?"))
+        {
+            await AuthStateProvider.Logout();
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    async Task LoginClick()
+    {
+        NavigationManager.NavigateTo("/Account/Login");
+    }
+
+    async Task RegisterClick()
+    {
+        NavigationManager.NavigateTo("/Account/Register");
+    }
+
+}

@@ -1,30 +1,51 @@
 ﻿@page "/Account/Login"
 @inject NavigationManager NavigationManager
-@inject IAccountService AccountService
+@inject CustomStateProvider CustomStateProvider
 
 <h3>Login</h3>
 
-<EditForm Model="_user" OnValidSubmit="HandleRegistration">
+<EditForm class="form-signin" OnValidSubmit="OnSubmit" Model="LoginRequest">
     <DataAnnotationsValidator/>
+
     <div class="form-label">
-        <label for="username" class="required">Username</label>
-        <InputText id="username" @bind-Value="_user.Username" class="form-control"/>
+        <label for="inputUsername" class="required">Username</label>
+        <InputText id="inputUsername" class="form-control" @bind-Value="LoginRequest.UserName" autofocus placeholder="Username"/>
     </div>
+
     <div class="form-label">
-        <label for="password" class="required">Password</label>
-        <InputText id="password" @bind-Value="_user.Password" class="form-control" type="password"/>
+        <label for="inputPassword" class="required">Password</label>
+        <InputText type="password" id="inputPassword" class="form-control" placeholder="Password" @bind-Value="LoginRequest.Password"/>
     </div>
+
+    <div class="form-check m-3">
+        <InputCheckbox id="inputRememberMe" class="form-check-input" @bind-Value="@LoginRequest.RememberMe"/>
+        <label class="form-check-label" for="inputRememberMe">Remember Me</label>
+    </div>
+
     <ValidationSummary/>
-    <br/>
-    <button type="submit" class="btn btn-primary">Login</button>
+
+    <div>
+        <button class="btn btn-primary" type="submit">Sign in</button>
+        <label class="text-danger">@Error</label>
+    </div>
 </EditForm>
 
-@code {
-    readonly ClientLoginAccountModel _user = new();
+@code{
+    LoginRequest LoginRequest { get; set; } = new LoginRequest();
+    string Error { get; set; }
 
-    async void HandleRegistration()
+    async Task OnSubmit()
     {
-        await AccountService.LoginUser(_user);
-        NavigationManager.NavigateTo("/");
+        Error = null;
+        try
+        {
+            await CustomStateProvider.Login(LoginRequest);
+            NavigationManager.NavigateTo("");
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
     }
+
 }
