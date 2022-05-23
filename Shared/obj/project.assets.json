@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
+      "projectUniqueName": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
       "projectName": "BlazorAuthenticationLearn.Shared",
-      "projectPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
+      "projectPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
       "packagesPath": "C:\\Users\\Amos\\.nuget\\packages\\",
-      "outputPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\obj\\",
+      "outputPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Amos\\AppData\\Roaming\\NuGet\\NuGet.Config",

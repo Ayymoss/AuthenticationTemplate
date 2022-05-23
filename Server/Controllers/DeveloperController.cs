@@ -1,6 +1,6 @@
 ﻿using BlazorAuthenticationLearn.Server.Data;
-using BlazorAuthenticationLearn.Shared;
 using BlazorAuthenticationLearn.Shared.Models;
+using BlazorAuthenticationLearn.Shared.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,20 +19,23 @@ public class DeveloperController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Developer>>> Get()
+    [Authorize(Roles = nameof(RoleName.SuperAdmin))]
+    public async Task<ActionResult<List<Developer>>> GetDeveloper()
     {
         var devs = await _context.Developers.ToListAsync();
         return Ok(devs);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Developer>> Get(int id)
+    [Authorize(Roles = nameof(RoleName.SuperAdmin))]
+    public async Task<ActionResult<Developer>> GetDeveloper(int id)
     {
         var dev = await _context.Developers.FirstOrDefaultAsync(a => a.Id == id);
         return Ok(dev);
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(RoleName.SuperAdmin))]
     public async Task<ActionResult<int>> Post(Developer developer)
     {
         _context.Add(developer);

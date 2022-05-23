@@ -8,13 +8,13 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = BlazorAuthenticationLearn.Server
 build_property.RootNamespace = BlazorAuthenticationLearn.Server
-build_property.ProjectDir = D:\Users\Amos\RiderProjects\_Other\BlazorAuthenticationLearn\Server\
+build_property.ProjectDir = D:\Users\Amos\RiderProjects\_LearnBlazor\BlazorAuthenticationLearn\Server\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\Users\Amos\RiderProjects\_Other\BlazorAuthenticationLearn\Server
+build_property.MSBuildProjectDirectory = D:\Users\Amos\RiderProjects\_LearnBlazor\BlazorAuthenticationLearn\Server
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/Users/Amos/RiderProjects/_Other/BlazorAuthenticationLearn/Server/Pages/Error.cshtml]
+[D:/Users/Amos/RiderProjects/_LearnBlazor/BlazorAuthenticationLearn/Server/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

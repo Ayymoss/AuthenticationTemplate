@@ -1,5 +1,5 @@
 ﻿@page "/Developer"
-@inject HttpClient Client
+@inject HttpClient Http
 @inject IJSRuntime Js
 @attribute [Authorize(Roles = nameof(RoleName.SuperAdmin))]
 
@@ -46,7 +46,6 @@ else
                 </td>
             </tr>
         }
-
         </tbody>
     </table>
 }
@@ -54,7 +53,7 @@ else
     Developer[] Developers { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        Developers = await Client.GetFromJsonAsync<Developer[]>("api/Developer");
+        Developers = await Http.GetFromJsonAsync<Developer[]>("api/Developer");
     }
 
     async Task Delete(int developerId)
@@ -62,7 +61,7 @@ else
         var dev = Developers.First(x => x.Id == developerId);
         if (await Js.InvokeAsync<bool>("confirm", $"Do you want to delete {dev.FirstName}'s ({dev.Id}) Record?"))
         {
-            await Client.DeleteAsync($"api/Developer/{developerId}");
+            await Http.DeleteAsync($"api/Developer/{developerId}");
             await OnInitializedAsync();
         }
     }

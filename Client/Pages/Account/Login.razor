@@ -1,5 +1,6 @@
 ﻿@page "/Account/Login"
 @inject NavigationManager NavigationManager
+@inject IToastService ToastService
 @inject CustomStateProvider CustomStateProvider
 
 <h3>Login</h3>
@@ -40,7 +41,8 @@
         try
         {
             await CustomStateProvider.Login(LoginRequest);
-            NavigationManager.NavigateTo("");
+            ToastService.ShowSuccess("Login successful");
+            NavigationManager.NavigateTo("/");
         }
         catch (Exception ex)
         {

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Server\\BlazorAuthenticationLearn.Server.csproj": {}
+    "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Server\\BlazorAuthenticationLearn.Server.csproj": {}
   },
   "projects": {
-    "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj": {
+    "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj",
+        "projectUniqueName": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj",
         "projectName": "BlazorAuthenticationLearn.Client",
-        "projectPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj",
+        "projectPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj",
         "packagesPath": "C:\\Users\\Amos\\.nuget\\packages\\",
-        "outputPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Client\\obj\\",
+        "outputPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Client\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Amos\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,8 +28,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj": {
-                "projectPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj"
+              "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj": {
+                "projectPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj"
               }
             }
           }
@@ -44,22 +44,26 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Blazored.LocalStorage": {
+            "Blazored.Toast": {
               "target": "Package",
-              "version": "[4.2.0, )"
+              "version": "[3.2.2, )"
             },
             "Microsoft.AspNetCore.Components.Authorization": {
               "target": "Package",
-              "version": "[6.0.4, )"
+              "version": "[6.0.5, )"
             },
             "Microsoft.AspNetCore.Components.WebAssembly": {
               "target": "Package",
-              "version": "[6.0.4, )"
+              "version": "[6.0.5, )"
             },
             "Microsoft.AspNetCore.Components.WebAssembly.DevServer": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.4, )"
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[6.0.0, )"
             }
           },
           "imports": [
@@ -92,14 +96,14 @@
         }
       }
     },
-    "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Server\\BlazorAuthenticationLearn.Server.csproj": {
+    "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Server\\BlazorAuthenticationLearn.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Server\\BlazorAuthenticationLearn.Server.csproj",
+        "projectUniqueName": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Server\\BlazorAuthenticationLearn.Server.csproj",
         "projectName": "BlazorAuthenticationLearn.Server",
-        "projectPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Server\\BlazorAuthenticationLearn.Server.csproj",
+        "projectPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Server\\BlazorAuthenticationLearn.Server.csproj",
         "packagesPath": "C:\\Users\\Amos\\.nuget\\packages\\",
-        "outputPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Server\\obj\\",
+        "outputPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Amos\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -116,11 +120,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj": {
-                "projectPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj"
+              "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj": {
+                "projectPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj"
               },
-              "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj": {
-                "projectPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj"
+              "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj": {
+                "projectPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj"
               }
             }
           }
@@ -135,23 +139,27 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Blazored.Toast": {
+              "target": "Package",
+              "version": "[3.2.2, )"
+            },
             "Microsoft.AspNetCore.Components.WebAssembly.Server": {
               "target": "Package",
-              "version": "[6.0.4, )"
+              "version": "[6.0.5, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.0.4, )"
+              "version": "[6.0.5, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.0.4, )"
+              "version": "[6.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.4, )"
+              "version": "[6.0.5, )"
             },
             "Npgsql": {
               "target": "Package",
@@ -188,14 +196,14 @@
         }
       }
     },
-    "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj": {
+    "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
+        "projectUniqueName": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
         "projectName": "BlazorAuthenticationLearn.Shared",
-        "projectPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
+        "projectPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
         "packagesPath": "C:\\Users\\Amos\\.nuget\\packages\\",
-        "outputPath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\obj\\",
+        "outputPath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Amos\\AppData\\Roaming\\NuGet\\NuGet.Config",

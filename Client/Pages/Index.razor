@@ -4,7 +4,8 @@
 
 <AuthorizeView>
     <Authorized>
-        <h1>Hello, @context.User.Identity.Name! You are a @_role.</h1>
+        <h1>Name: @context.User.Identity.Name</h1>
+        <p>Role: @_role</p>
     </Authorized>
     <Authorizing>
         <h1>Checking autorization, please wait...</h1>
@@ -27,8 +28,8 @@
         if (authState != null)
         {
             _role = authState.User.IsInRole(nameof(RoleName.SuperAdmin)) 
-                ? nameof(RoleName.SuperAdmin).ToLower() 
-                : nameof(RoleName.User).ToLower();
+                ? nameof(RoleName.SuperAdmin) 
+                : nameof(RoleName.User);
         }
     }
 

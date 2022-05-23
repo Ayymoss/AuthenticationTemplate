@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bcvUTZYRYbYVvNXqkhR17ccrgxyXcuMNMzC4TucLmc1XpowHMIBVvXJlfpa5xALlc6daEAkFeDtLNDGQAdoR8A==",
+  "dgSpecHash": "wGbDI/pLYCUOW9JDvDulwsDEfO4tWkHme9AhO4/up6Bd/ZQTrzkwFnK93VOqqQ1XPP4aZEkTFFzTfVwRsUNxXQ==",
   "success": true,
-  "projectFilePath": "D:\\Users\\Amos\\RiderProjects\\_Other\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
+  "projectFilePath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Shared\\BlazorAuthenticationLearn.Shared.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

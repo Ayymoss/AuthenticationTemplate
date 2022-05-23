@@ -1,6 +1,8 @@
 using BlazorAuthenticationLearn.Server;
 using BlazorAuthenticationLearn.Server.Data;
 using BlazorAuthenticationLearn.Server.Models;
+using Blazored.Toast;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +17,18 @@ if (databaseEnvironment == null)
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(5000);
+    options.ListenLocalhost(5001, configure => configure.UseHttps());
+});
 
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 // Custom Services
-builder.Services.AddDbContext<PostgresqlDataContext>(options => { options.UseNpgsql(databaseEnvironment); });
+builder.Services.AddDbContext<PostgresqlDataContext>(options => { options.UseNpgsql(databaseEnvironment!); });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<PostgresqlDataContext>();
 builder.Services.ConfigureApplicationCookie(options =>
@@ -34,8 +41,18 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+builder.Services.Configure<FormOptions>(x =>
+{
+    x.ValueLengthLimit = int.MaxValue;
+    x.MultipartBodyLengthLimit = int.MaxValue;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddBlazoredToast();
+
+builder.Services.AddHttpClient();
 
 // Generated app builder using above services.
 var app = builder.Build();

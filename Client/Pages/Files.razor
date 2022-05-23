@@ -1,0 +1,78 @@
+﻿@page "/Files"
+@inject HttpClient Http
+@inject IJSRuntime Js
+@attribute [Authorize]
+
+<h3>Files</h3>
+
+@if (FileContext == null)
+{
+    <p>Loading...</p>
+}
+else if (FileContext.Length == 0)
+{
+    <p>No files found</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>File ID</th>
+            <th>File Name</th>
+            <th>File Extension</th>
+            <th>Upload Date (UTC)</th>
+            <th>File Size</th>
+            <th>Uploaded By</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var file in FileContext)
+        {
+            <tr>
+                <td>@file.Id</td>
+                <td>@file.Name</td>
+                <td>@Path.GetExtension(file.Name)</td>
+                <td>@file.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@string.Format($"{file.Size/1000:N0} KB") </td>
+                <td>@file.UserName</td>
+                <td>
+                    <button @onclick="() => DownloadFile(file.Id)" class="btn btn-primary mx-1">Down - JS</button>
+                    <a href="api/File/Download/@file.Id" class="btn btn-primary mx-1">Down - HREF</a>
+                    <button @onclick="() => DeleteFile(file.Id)" class="btn btn-danger">Delete</button>
+                </td>
+            </tr>
+        } 
+        </tbody>
+    </table>
+}
+
+@code {
+    FileContext[] FileContext { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        FileContext = await Http.GetFromJsonAsync<FileContext[]>("api/File/GetFiles");
+        StateHasChanged();
+    }
+
+    async void DeleteFile(int fileId)
+    {
+        var file = FileContext.First(x => x.Id == fileId);
+        if (await Js.InvokeAsync<bool>("confirm", $"Do you want to delete ({file.Id}) {file.Name}'s Record?"))
+        {
+            await Http.DeleteAsync($"api/File/Delete/{fileId}");
+            await OnInitializedAsync(); 
+        }
+    }
+
+    async void DownloadFile(int fileId)
+    { 
+        var file = FileContext.First(x => x.Id == fileId);
+        var response = await Http.GetByteArrayAsync($"api/File/Download/{file.Id}");
+        await Js.InvokeVoidAsync("download", response, file.Name);
+    }
+
+    
+}

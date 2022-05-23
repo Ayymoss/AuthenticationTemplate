@@ -3,6 +3,15 @@
 @inject CustomStateProvider AuthStateProvider
 @inject IJSRuntime Js
 
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                    Timeout="10"
+                    IconType="IconType.FontAwesome"
+                    SuccessClass="success-toast-override"
+                    SuccessIcon="fa fa-thumbs-up"
+                    ErrorIcon="fa fa-bug"
+                    ShowProgressBar="@true"
+                    ShowCloseButton="@true"/>
+
 <div class="page">
     <div class="sidebar">
         <NavMenu/>
@@ -12,15 +21,12 @@
         <div class="top-row px-4">
             <AuthorizeView>
                 <Authorized>
+                    <button @onclick="ChangePasswordClick" class="btn btn-info mx-3">Change Password</button>
                     <button @onclick="LogoutClick" class="btn btn-danger">Logout</button>
                 </Authorized>
                 <NotAuthorized>
-                    <div>
-                        <button @onclick="LoginClick" class="btn btn-primary mx-3">Login</button>
-                    </div>
-                    <div>
-                        <button @onclick="RegisterClick" class="btn btn-secondary">Register</button>
-                    </div>
+                    <button @onclick="LoginClick" class="btn btn-primary mx-3">Login</button>
+                    <button @onclick="RegisterClick" class="btn btn-secondary">Register</button>
                 </NotAuthorized>
             </AuthorizeView>
         </div>
@@ -35,7 +41,7 @@
 
     [CascadingParameter]
     Task<AuthenticationState> AuthenticationState { get; set; }
-    
+
     async Task LogoutClick()
     {
         if (await Js.InvokeAsync<bool>("confirm", "Are you sure you want to sign out?"))
@@ -53,6 +59,11 @@
     async Task RegisterClick()
     {
         NavigationManager.NavigateTo("/Account/Register");
+    }
+
+    async Task ChangePasswordClick()
+    {
+        NavigationManager.NavigateTo("/Account/ChangePassword");
     }
 
 }

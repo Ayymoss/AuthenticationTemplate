@@ -1,7 +1,5 @@
 ﻿using System.Security.Claims;
-using System.Text.Json;
 using BlazorAuthenticationLearn.Shared.Models;
-using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlazorAuthenticationLearn.Client.Services;
@@ -55,6 +53,12 @@ public class CustomStateProvider : AuthenticationStateProvider
     public async Task Login(LoginRequest loginRequest)
     {
         await _api.Login(loginRequest);
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+    }
+    
+    public async Task ChangePassword(ChangePasswordRequest changePasswordRequest)
+    {
+        await _api.ChangePassword(changePasswordRequest);
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 

@@ -1,0 +1,147 @@
+﻿@page "/Upload"
+@using System.Linq
+@using System.Net.Http.Headers
+@using System.Text.Json
+@using Microsoft.Extensions.Logging
+@inject HttpClient Http
+@inject ILogger<Upload> Logger
+@attribute [Authorize]
+
+<h1>Upload Files</h1>
+
+<p>
+    <label>
+        Upload up to @MaxAllowedFiles files:
+        <InputFile OnChange="@OnInputFileChange" multiple />
+    </label>
+</p>
+
+@if (_files.Count > 0)
+{
+    <div class="card">
+        <div class="card-body">
+            <ul>
+                @foreach (var file in _files)
+                {
+                    <li>
+                        File: @file.Name
+                        <br>
+                        @if (FileUpload(_uploadResults, file.Name, Logger,
+                           out var result))
+                        {
+                            <span>
+                                Stored File Name: @result.StoredFileName
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                There was an error uploading the file
+                                (Error: @result.ErrorCode).
+                            </span>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@code {
+    // https://docs.microsoft.com/en-us/aspnet/core/blazor/file-uploads?view=aspnetcore-6.0&pivots=server
+    // FileToDatabaseStringTest - Solution for Encryption
+    
+    private readonly List<File> _files = new();
+    private List<UploadResult> _uploadResults = new();
+        private const int MaxAllowedFiles = 50;
+    private bool _shouldRender;
+
+    protected override bool ShouldRender() => _shouldRender;
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        _shouldRender = false;
+        const long maxFileSize = 50_000_000;
+        var upload = false;
+
+        using var content = new MultipartFormDataContent();
+
+        foreach (var file in e.GetMultipleFiles(MaxAllowedFiles))
+        {
+            if (_uploadResults.SingleOrDefault(f => f.FileName == file.Name) is null)
+            {
+                try
+                {
+                    var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
+
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+
+                    _files.Add(new File { Name = file.Name });
+
+                    content.Add(
+                        content: fileContent,
+                        name: "\"files\"",
+                        fileName: file.Name);
+
+                    upload = true;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogInformation("{FileName} not uploaded (Err: 6): {Message}", file.Name, ex.Message);
+
+                    _uploadResults.Add(
+                        new UploadResult
+                        {
+                            FileName = file.Name, 
+                            ErrorCode = 6, 
+                            Uploaded = false
+                        });
+                }
+            }
+        }
+
+        if (upload)
+        {
+
+            var response = await Http.PostAsync("api/File/Upload", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+
+                await using var responseStream = await response.Content.ReadAsStreamAsync();
+
+                var newUploadResults = await JsonSerializer.DeserializeAsync<IList<UploadResult>>(responseStream, options);
+
+                if (newUploadResults is not null)
+                {
+                    _uploadResults = _uploadResults.Concat(newUploadResults).ToList();
+                }
+            }
+        }
+
+        _shouldRender = true;
+    }
+
+    private static bool FileUpload(IEnumerable<UploadResult> uploadResults,
+        string fileName, ILogger logger, out UploadResult result)
+    {
+        result = uploadResults.SingleOrDefault(f => f.FileName == fileName) ?? new UploadResult();
+
+        if (!result.Uploaded)
+        {
+            logger.LogInformation("{FileName} not uploaded (Err: 5)", fileName);
+            result.ErrorCode = 5;
+        }
+
+        return result.Uploaded;
+    }
+
+    private class File
+    {
+        public string Name { get; set; }
+    }
+}

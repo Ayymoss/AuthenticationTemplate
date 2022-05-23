@@ -16,7 +16,8 @@ public class AuthController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly PostgresqlDataContext _context;
 
-    public AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, PostgresqlDataContext context)
+    public AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager,
+        PostgresqlDataContext context)
     {
         _signInManager = signInManager;
         _userManager = userManager;
@@ -40,18 +41,18 @@ public class AuthController : ControllerBase
         var checkEmail = await _context.Users
             .Where(x => x.Email == registerRequest.Email)
             .FirstOrDefaultAsync();
-        
+
         if (checkEmail != null) return BadRequest("Email is already in use.");
-        
+
         var user = new ApplicationUser
         {
             UserName = registerRequest.UserName,
             Email = registerRequest.Email
         };
-        
+
         var result = await _userManager.CreateAsync(user, registerRequest.Password);
         if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
-        
+
         return Ok(await Login(new LoginRequest
         {
             UserName = registerRequest.UserName,
@@ -60,12 +61,20 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("Logout"), Authorize]
-    public async Task<ActionResult<OkResult>> Logout()
+    public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
         return Ok();
     }
-    
+
+    [HttpPost("ChangePassword"), Authorize]
+    public async Task<IActionResult> ChangePassword(ChangePasswordRequest changePasswordRequest)
+    {
+        var user = await _userManager.FindByNameAsync(User.Identity.Name);
+        return Ok(await _userManager.ChangePasswordAsync(user, changePasswordRequest.OldPassword,
+            changePasswordRequest.Password));
+    }
+
     [HttpGet("CurrentUserInfo")]
     public async Task<ActionResult<CurrentUser>> CurrentUserInfo()
     {

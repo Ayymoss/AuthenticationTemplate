@@ -13,6 +13,7 @@ public class PostgresqlDataContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Developer> Developers { get; set; }
+    public DbSet<FileContext> FileContexts { get; set; }
 
     private readonly string _roleGuid = Guid.NewGuid().ToString();
     private readonly string _roleGuidConStamp = Guid.NewGuid().ToString();

@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Json;
 using BlazorAuthenticationLearn.Shared.Models;
-using Microsoft.AspNetCore.Components;
+
 
 namespace BlazorAuthenticationLearn.Client.Services;
 
@@ -22,6 +22,13 @@ public class AuthService : IAuthService
     public async Task Login(LoginRequest loginRequest)
     {
         var result = await _httpClient.PostAsJsonAsync("api/Auth/Login", loginRequest);
+        if (result.StatusCode == System.Net.HttpStatusCode.BadRequest) throw new Exception(await result.Content.ReadAsStringAsync());
+        result.EnsureSuccessStatusCode();
+    }
+
+    public async Task ChangePassword(ChangePasswordRequest changePasswordRequest)
+    {
+        var result = await _httpClient.PostAsJsonAsync("api/Auth/ChangePassword", changePasswordRequest);
         if (result.StatusCode == System.Net.HttpStatusCode.BadRequest) throw new Exception(await result.Content.ReadAsStringAsync());
         result.EnsureSuccessStatusCode();
     }

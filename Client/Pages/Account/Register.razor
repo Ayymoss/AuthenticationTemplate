@@ -1,5 +1,6 @@
 ﻿@page "/Account/Register"
 @inject NavigationManager NavigationManager
+@inject IToastService ToastService
 @inject CustomStateProvider AuthStateProvider
 
 <h1 class="h2 font-weight-normal login-title">Register</h1>
@@ -46,7 +47,8 @@
         try
         {
             await AuthStateProvider.Register(RegisterRequest);
-            NavigationManager.NavigateTo("");
+            ToastService.ShowSuccess("Registration successful");
+            NavigationManager.NavigateTo("/");
         }
         catch (Exception ex)
         {
