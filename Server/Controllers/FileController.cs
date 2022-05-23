@@ -67,7 +67,7 @@ public class FileController : ControllerBase
                                 encDec.EncryptString(Environment.GetEnvironmentVariable("EncryptionDecryptionKey"),
                                     byteArray);
                             
-                            file.OpenReadStream().Dispose();
+                            
 
                             uploadResult.Uploaded = true;
                             uploadResult.StoredFileName = file.FileName;
@@ -85,7 +85,8 @@ public class FileController : ControllerBase
 
                             _context.Add(fileToStore);
                             await _context.SaveChangesAsync();
-
+                            
+                            await file.OpenReadStream().DisposeAsync();
                         }
                         catch (IOException ex)
                         {
