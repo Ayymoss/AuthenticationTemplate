@@ -35,7 +35,7 @@ else
                 <td>@file.Name</td>
                 <td>@Path.GetExtension(file.Name)</td>
                 <td>@file.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td>@string.Format($"{file.Size/1000:N0} KB") </td>
+                <td>@string.Format($"{file.Size / 1000:N0} KB") </td>
                 <td>@file.UserName</td>
                 <td>
                     <button @onclick="() => DownloadFile(file.Id)" class="btn btn-primary mx-1">Down - JS</button>
@@ -43,10 +43,13 @@ else
                     <button @onclick="() => DeleteFile(file.Id)" class="btn btn-danger">Delete</button>
                 </td>
             </tr>
-        } 
+        }
         </tbody>
     </table>
 }
+
+
+
 
 @code {
     FileContext[] FileContext { get; set; }
@@ -63,16 +66,17 @@ else
         if (await Js.InvokeAsync<bool>("confirm", $"Do you want to delete ({file.Id}) {file.Name}'s Record?"))
         {
             await Http.DeleteAsync($"api/File/Delete/{fileId}");
-            await OnInitializedAsync(); 
+            await OnInitializedAsync();
         }
     }
 
     async void DownloadFile(int fileId)
-    { 
+    {
         var file = FileContext.First(x => x.Id == fileId);
         var response = await Http.GetByteArrayAsync($"api/File/Download/{file.Id}");
-        await Js.InvokeVoidAsync("download", response, file.Name);
+        var fileStream = new MemoryStream(response);
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+        await Js.InvokeVoidAsync("downloadFileFromStream", file.Name, streamRef);
     }
-
     
 }

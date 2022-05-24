@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "qsE92TzI/NzXI/BNhsb+LZLM8h5h8CTWSKLleLt6CEz984Gv/9WfIVKdF+7gm8drrnnzX9J4tPBjuyCJ7HE4Uw==",
+  "dgSpecHash": "yIDjsGms4EVqP7oNJV0Q/i2QiAZQ693ZGM8y+vdBiJNyBsC5zr5/xmUpXibdW4M8WvXeE0ogw9d6hlEPoI+yEg==",
   "success": true,
   "projectFilePath": "D:\\Users\\Amos\\RiderProjects\\_LearnBlazor\\BlazorAuthenticationLearn\\Client\\BlazorAuthenticationLearn.Client.csproj",
   "expectedPackageFiles": [
@@ -36,7 +36,7 @@
     "C:\\Users\\Amos\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\Amos\\.nuget\\packages\\system.text.encodings.web\\6.0.0\\system.text.encodings.web.6.0.0.nupkg.sha512",
     "C:\\Users\\Amos\\.nuget\\packages\\system.text.json\\6.0.0\\system.text.json.6.0.0.nupkg.sha512",
-    "C:\\Users\\Amos\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\6.0.4\\microsoft.netcore.app.runtime.mono.browser-wasm.6.0.4.nupkg.sha512"
+    "C:\\Users\\Amos\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\6.0.5\\microsoft.netcore.app.runtime.mono.browser-wasm.6.0.5.nupkg.sha512"
   ],
   "logs": []
 }

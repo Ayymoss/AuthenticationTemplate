@@ -27,91 +27,32 @@ public class FileController : ControllerBase
     }
 
     [HttpPost("Upload"), Authorize, RequestSizeLimit(MaxFileSize)]
-    public async Task<ActionResult<IList<UploadResult>>> UploadFile([FromForm] IEnumerable<IFormFile> files)
+    public async Task<ActionResult<bool>> UploadFile([FromBody] FileChunk fileChunk)
     {
-        const int maxAllowedFiles = 50;
-        var filesProcessed = 0;
-        var resourcePath = new Uri($"{Request.Scheme}://{Request.Host}/");
-        var uploadResults = new List<UploadResult>();
-        var encDec = new EncryptionDecryption();
-
-        foreach (var file in files)
+        try
         {
-            var uploadResult = new UploadResult();
-            var untrustedFileName = file.FileName;
-            uploadResult.FileName = untrustedFileName;
-            var trustedFileNameForDisplay = WebUtility.HtmlEncode(untrustedFileName);
+            // get the local filename
+            var filePath = Path.Join(Environment.CurrentDirectory + "Files");
+            var fileName = filePath + fileChunk.FileNameNoPath;
 
-            if (filesProcessed < maxAllowedFiles)
+            // delete the file if necessary
+            if (fileChunk.FirstChunk && System.IO.File.Exists(fileName))
             {
-                switch (file.Length)
-                {
-                    case 0:
-                        _logger.LogInformation("{FileName} length is 0 (Err: 1)", trustedFileNameForDisplay);
-                        uploadResult.ErrorCode = 1;
-                        break;
-                    case > MaxFileSize:
-                        _logger.LogInformation(
-                            "{FileName} of {Length} bytes is larger than the limit of {Limit} bytes (Err: 2)",
-                            trustedFileNameForDisplay, file.Length, MaxFileSize);
-                        uploadResult.ErrorCode = 2;
-                        break;
-                    default:
-                        try
-                        {
-                            // TODO: Returned bytearray on ln 61 from encryption is not the correct length as what you'd expect
-                            var byteArray = new byte[file.Length];
-                            var readAsync = await file.OpenReadStream()
-                                .ReadAsync(byteArray.AsMemory(0, (int) file.Length));
-                            var (encryptedArray, iv) =
-                                encDec.EncryptString(Environment.GetEnvironmentVariable("EncryptionDecryptionKey"),
-                                    byteArray);
-                            
-                            
-
-                            uploadResult.Uploaded = true;
-                            uploadResult.StoredFileName = file.FileName;
-
-                            var fileToStore = new FileContext
-                            {
-                                Name = file.FileName,
-                                Size = file.Length,
-                                Iv = iv,
-                                UploadDate = DateTimeOffset.UtcNow,
-                                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
-                                UserName = User.Identity.Name,
-                                Data = encryptedArray
-                            };
-
-                            _context.Add(fileToStore);
-                            await _context.SaveChangesAsync();
-                            
-                            await file.OpenReadStream().DisposeAsync();
-                        }
-                        catch (IOException ex)
-                        {
-                            _logger.LogError("{FileName} error on upload (Err: 3): {Message}",
-                                trustedFileNameForDisplay, ex.Message);
-                            uploadResult.ErrorCode = 3;
-                        }
-
-                        break;
-                }
-
-                filesProcessed++;
-            }
-            else
-            {
-                _logger.LogInformation(
-                    "{FileName} not uploaded because the " + "request exceeded the allowed {Count} of files (Err: 4)",
-                    trustedFileNameForDisplay, maxAllowedFiles);
-                uploadResult.ErrorCode = 4;
+                System.IO.File.Delete(fileName);
             }
 
-            uploadResults.Add(uploadResult);
+            // open for writing
+            await using var stream = System.IO.File.OpenWrite(fileName);
+            stream.Seek(fileChunk.Offset, SeekOrigin.Begin);
+            stream.Write(fileChunk.Data, 0, fileChunk.Data.Length);
+
+            return true;
         }
-
-        return new CreatedResult(resourcePath, uploadResults);
+        catch (Exception ex)
+        {
+            var msg = ex.Message;
+            return false;
+        }
     }
 
     [HttpGet("GetFiles"), Authorize]

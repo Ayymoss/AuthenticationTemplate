@@ -1,147 +1,109 @@
 ﻿@page "/Upload"
-@using System.Linq
-@using System.Net.Http.Headers
-@using System.Text.Json
-@using Microsoft.Extensions.Logging
-@inject HttpClient Http
-@inject ILogger<Upload> Logger
+@inject FileManager FileManager
 @attribute [Authorize]
 
 <h1>Upload Files</h1>
 
 <p>
     <label>
-        Upload up to @MaxAllowedFiles files:
-        <InputFile OnChange="@OnInputFileChange" multiple />
+        <InputFile OnChange="@OnInputFileChange"/>
     </label>
 </p>
-
-@if (_files.Count > 0)
+@if (_largeUploadMessage != null)
 {
-    <div class="card">
-        <div class="card-body">
-            <ul>
-                @foreach (var file in _files)
-                {
-                    <li>
-                        File: @file.Name
-                        <br>
-                        @if (FileUpload(_uploadResults, file.Name, Logger,
-                           out var result))
-                        {
-                            <span>
-                                Stored File Name: @result.StoredFileName
-                            </span>
-                        }
-                        else
-                        {
-                            <span>
-                                There was an error uploading the file
-                                (Error: @result.ErrorCode).
-                            </span>
-                        }
-                    </li>
-                }
-            </ul>
-        </div>
-    </div>
+    <p>Result: @_largeUploadMessage</p>
 }
 
 @code {
-    // https://docs.microsoft.com/en-us/aspnet/core/blazor/file-uploads?view=aspnetcore-6.0&pivots=server
-    // FileToDatabaseStringTest - Solution for Encryption
-    
-    private readonly List<File> _files = new();
-    private List<UploadResult> _uploadResults = new();
-        private const int MaxAllowedFiles = 50;
     private bool _shouldRender;
-
+    string _imageUrl = "";
+    bool _uploading = false;
+    bool _uploadingLargeFile = false;
+    string _largeUploadMessage = "";
+    long _uploadedBytes;
+    long _totalBytes;
+    
     protected override bool ShouldRender() => _shouldRender;
 
-    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    private async Task OnInputFileChange(InputFileChangeEventArgs args)
     {
-        _shouldRender = false;
-        const long maxFileSize = 50_000_000;
-        var upload = false;
+        _uploadedBytes = 0;
 
-        using var content = new MultipartFormDataContent();
+        // Disable the file input field
+        _uploadingLargeFile = true;
+        await InvokeAsync(StateHasChanged);
 
-        foreach (var file in e.GetMultipleFiles(MaxAllowedFiles))
+        // calculate the chunks we have to send
+        _totalBytes = args.File.Size;
+        const long chunkSize = 400000; // fairly arbitrary
+        var numChunks = _totalBytes / chunkSize;
+        var remainder = _totalBytes % chunkSize;
+
+        // get new filename with a bit of entropy
+        var justFileName = Path.GetFileNameWithoutExtension(args.File.Name);
+        var extension = Path.GetExtension(args.File.Name);
+        var newFileNameWithoutPath = $"{justFileName}-{DateTime.Now.Ticks.ToString()}{extension}";
+
+        var firstChunk = true;
+        
+        // Open the input and output file streams
+        await using (var inStream = args.File.OpenReadStream(long.MaxValue))
         {
-            if (_uploadResults.SingleOrDefault(f => f.FileName == file.Name) is null)
+            long percent = 0;
+            for (var i = 0; i < numChunks; i++)
             {
-                try
+                // Read the next chunk
+                var buffer = new byte[chunkSize];
+                var readAsync = await inStream.ReadAsync(buffer, 0, buffer.Length);
+
+                // create the FileChunk object
+                var chunk = new FileChunk
                 {
-                    var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
-
-                    fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
-
-                    _files.Add(new File { Name = file.Name });
-
-                    content.Add(
-                        content: fileContent,
-                        name: "\"files\"",
-                        fileName: file.Name);
-
-                    upload = true;
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogInformation("{FileName} not uploaded (Err: 6): {Message}", file.Name, ex.Message);
-
-                    _uploadResults.Add(
-                        new UploadResult
-                        {
-                            FileName = file.Name, 
-                            ErrorCode = 6, 
-                            Uploaded = false
-                        });
-                }
-            }
-        }
-
-        if (upload)
-        {
-
-            var response = await Http.PostAsync("api/File/Upload", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
+                    Data = buffer,
+                    FileNameNoPath = newFileNameWithoutPath,
+                    Offset = _uploadedBytes,
+                    FirstChunk = firstChunk
                 };
 
-                await using var responseStream = await response.Content.ReadAsStreamAsync();
+                // upload this chunk
+                await FileManager.UploadFileChunk(chunk);
 
-                var newUploadResults = await JsonSerializer.DeserializeAsync<IList<UploadResult>>(responseStream, options);
+                firstChunk = false; // no longer the first chunk
 
-                if (newUploadResults is not null)
+                // Update our progress data and UI
+                _uploadedBytes += chunkSize;
+                percent = _uploadedBytes * 100 / _totalBytes;
+                // Report progress with a string
+                _largeUploadMessage = $"Uploading {args.File.Name} {percent}%";
+                await InvokeAsync(StateHasChanged);
+            }
+
+            if (remainder > 0)
+            {
+                // Same stuff as above, just with the leftover chunk data
+                var buffer = new byte[remainder];
+                var readAsync = await inStream.ReadAsync(buffer, 0, buffer.Length);
+
+                // create the FileChunk object
+                var chunk = new FileChunk
                 {
-                    _uploadResults = _uploadResults.Concat(newUploadResults).ToList();
-                }
+                    Data = buffer,
+                    FileNameNoPath = newFileNameWithoutPath,
+                    Offset = _uploadedBytes,
+                    FirstChunk = firstChunk
+                };
+
+                // upload this chunk
+                await FileManager.UploadFileChunk(chunk);
+
+                _uploadedBytes += remainder;
+                percent = _uploadedBytes * 100 / _totalBytes;
+                _largeUploadMessage = $"Uploading {args.File.Name} {percent}%";
+                await InvokeAsync(StateHasChanged);
             }
         }
 
-        _shouldRender = true;
-    }
-
-    private static bool FileUpload(IEnumerable<UploadResult> uploadResults,
-        string fileName, ILogger logger, out UploadResult result)
-    {
-        result = uploadResults.SingleOrDefault(f => f.FileName == fileName) ?? new UploadResult();
-
-        if (!result.Uploaded)
-        {
-            logger.LogInformation("{FileName} not uploaded (Err: 5)", fileName);
-            result.ErrorCode = 5;
-        }
-
-        return result.Uploaded;
-    }
-
-    private class File
-    {
-        public string Name { get; set; }
+        _largeUploadMessage = "Upload Complete.";
+        _uploadingLargeFile = false;
     }
 }
