@@ -24,6 +24,6 @@ public static class DatabaseConfiguration
         }
 
         var connectionString = $"Host={host};Port={port};Username={username};Password={password};Database={database}";
-        Environment.SetEnvironmentVariable("PostgreSQLDBConnection", connectionString);
+        Environment.SetEnvironmentVariable("BAL_ConnectionString", connectionString, EnvironmentVariableTarget.User);
     }
 }

@@ -29,8 +29,8 @@ public class AuthController : ControllerBase
     {
         var user = await _userManager.FindByNameAsync(loginRequest.UserName);
         if (user == null) return BadRequest("Could not find your account.");
-        var singInResult = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password, false);
-        if (!singInResult.Succeeded) return BadRequest("Password is incorrect.");
+        var signInResult = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password, false);
+        if (!signInResult.Succeeded) return BadRequest("Password is incorrect.");
         await _signInManager.SignInAsync(user, loginRequest.RememberMe);
         return Ok();
     }
@@ -39,10 +39,10 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<CurrentUser>> CreateUser(RegisterRequest registerRequest)
     {
         var checkEmail = await _context.Users
-            .Where(x => x.Email == registerRequest.Email)
+            .Where(x => x.NormalizedEmail == registerRequest.Email.ToUpper())
             .FirstOrDefaultAsync();
 
-        if (checkEmail != null) return BadRequest("Email is already in use.");
+        if (checkEmail != null) return BadRequest($"Email '{registerRequest.Email}' is already taken.");
 
         var user = new ApplicationUser
         {

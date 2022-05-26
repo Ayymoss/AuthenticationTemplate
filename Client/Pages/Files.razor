@@ -5,20 +5,24 @@
 
 <h3>Files</h3>
 
+<SfUploader MaxFileSize="100_000_000" ID="UploadFiles">
+    <UploaderAsyncSettings SaveUrl="api/File/Upload"></UploaderAsyncSettings>
+    <UploaderEvents Success="@SuccessHandler"></UploaderEvents>
+</SfUploader>
+
 @if (FileContext == null)
 {
-    <p>Loading...</p>
+    <text>Please wait, loading content...</text>
 }
 else if (FileContext.Length == 0)
 {
-    <p>No files found</p>
+    <text>It's empty here... Upload something.</text>
 }
 else
 {
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>File ID</th>
             <th>File Name</th>
             <th>File Extension</th>
             <th>Upload Date (UTC)</th>
@@ -31,16 +35,25 @@ else
         @foreach (var file in FileContext)
         {
             <tr>
-                <td>@file.Id</td>
-                <td>@file.Name</td>
-                <td>@Path.GetExtension(file.Name)</td>
+                <td>@Path.GetFileNameWithoutExtension(file.FileName)</td>
+                <td>@Path.GetExtension(file.FileName)</td>
                 <td>@file.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td>@string.Format($"{file.Size / 1000:N0} KB") </td>
-                <td>@file.UserName</td>
+                @switch (file.FileSize)
+                {
+                    case > 1_000 and < 1_000_000:
+                        <td>@string.Format($"{file.FileSize / 1_000:N0}KB")</td>
+                        break;
+                    case >= 1_000_000:
+                        <td>@string.Format($"{file.FileSize / 1_000_000:N0}MB")</td>
+                        break;
+                    default:
+                        <td>@string.Format($"{file.FileSize:N0}B")</td>
+                        break;
+                }
+                <td>@file.UploaderName</td>
                 <td>
-                    <button @onclick="() => DownloadFile(file.Id)" class="btn btn-primary mx-1">Down - JS</button>
-                    <a href="api/File/Download/@file.Id" class="btn btn-primary mx-1">Down - HREF</a>
-                    <button @onclick="() => DeleteFile(file.Id)" class="btn btn-danger">Delete</button>
+                    <button @onclick="() => DownloadFile(file.Id)" class="btn btn-primary mx-1">Download</button>
+                    <button @onclick="() => DeleteFile(file.Id)" class="btn btn-danger mx-1">Delete</button>
                 </td>
             </tr>
         }
@@ -48,10 +61,11 @@ else
     </table>
 }
 
-
-
-
 @code {
+
+    //https://www.c-sharpcorner.com/article/creating-search-feature-in-blazor-server-grid/
+    //https://www.daveabrock.com/2021/01/14/blast-off-blazor-search-box/
+
     FileContext[] FileContext { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -60,10 +74,12 @@ else
         StateHasChanged();
     }
 
+    async void SuccessHandler(SuccessEventArgs args) => await OnInitializedAsync();
+
     async void DeleteFile(int fileId)
     {
         var file = FileContext.First(x => x.Id == fileId);
-        if (await Js.InvokeAsync<bool>("confirm", $"Do you want to delete ({file.Id}) {file.Name}'s Record?"))
+        if (await Js.InvokeAsync<bool>("confirm", $"Do you want to delete ({file.Id}) {file.FileName}'s Record?"))
         {
             await Http.DeleteAsync($"api/File/Delete/{fileId}");
             await OnInitializedAsync();
@@ -76,7 +92,7 @@ else
         var response = await Http.GetByteArrayAsync($"api/File/Download/{file.Id}");
         var fileStream = new MemoryStream(response);
         using var streamRef = new DotNetStreamReference(stream: fileStream);
-        await Js.InvokeVoidAsync("downloadFileFromStream", file.Name, streamRef);
+        await Js.InvokeVoidAsync("downloadFileFromStream", file.FileName, streamRef);
     }
-    
+
 }

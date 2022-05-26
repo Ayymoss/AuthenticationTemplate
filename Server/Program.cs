@@ -1,14 +1,19 @@
 using BlazorAuthenticationLearn.Server;
 using BlazorAuthenticationLearn.Server.Data;
 using BlazorAuthenticationLearn.Server.Models;
+using BlazorAuthenticationLearn.Shared.Models;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-// TODO: Add Password Reset form
+// TODO: Add Admin Area for Password Resets and User management (Deletions etc)
+// TODO: File Search
 
-var databaseEnvironment = Environment.GetEnvironmentVariable("PostgreSQLDBConnection");
+// TODO: File download and delete need user check
+// TODO: If I do allow file deletions/downloads from other users, the path needs to be pulled from the DB user too
+
+var databaseEnvironment = Environment.GetEnvironmentVariable("BAL_ConnectionString", EnvironmentVariableTarget.User);
 
 if (databaseEnvironment == null)
 {
@@ -46,6 +51,8 @@ builder.Services.Configure<FormOptions>(x =>
     x.ValueLengthLimit = int.MaxValue;
     x.MultipartBodyLengthLimit = int.MaxValue;
 });
+
+builder.Services.AddScoped<Configuration>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

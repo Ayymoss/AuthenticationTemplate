@@ -22,10 +22,6 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Users/Amos/RiderProjects/_LearnBlazor/BlazorAuthenticationLearn/Client/Pages/Account/ChangePassword.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxDaGFuZ2VQYXNzd29yZC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/Users/Amos/RiderProjects/_LearnBlazor/BlazorAuthenticationLearn/Client/Pages/Developer/Create.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGV2ZWxvcGVyXENyZWF0ZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -50,13 +46,13 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Users/Amos/RiderProjects/_LearnBlazor/BlazorAuthenticationLearn/Client/Pages/Upload.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXBsb2FkLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/Users/Amos/RiderProjects/_LearnBlazor/BlazorAuthenticationLearn/Client/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Users/Amos/RiderProjects/_LearnBlazor/BlazorAuthenticationLearn/Client/Pages/Account/ChangePassword.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxDaGFuZ2VQYXNzd29yZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-qlfm5bdm3c
 
 [D:/Users/Amos/RiderProjects/_LearnBlazor/BlazorAuthenticationLearn/Client/Pages/Account/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxMb2dpbi5yYXpvcg==

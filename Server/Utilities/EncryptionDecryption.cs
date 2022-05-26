@@ -3,46 +3,33 @@ using System.Text;
 
 namespace BlazorAuthenticationLearn.Server.Utilities;
 
-public class EncryptionDecryption
+public static class EncryptionDecryption
 {
-    public (byte[], byte[]) EncryptString(string key, byte[] byteArray)
+    public static byte[] Encrypt(string key, Stream sourceStream, Stream destStream)
     {
         var rnd = new Random();
         var iv = new byte[16];
         rnd.NextBytes(iv);
-        byte[] array;
 
         using var aes = Aes.Create();
         aes.Key = Encoding.UTF8.GetBytes(key);
         aes.IV = iv;
 
         var encryptor = aes.CreateEncryptor();
+        using var cryptoStream = new CryptoStream(destStream, encryptor, CryptoStreamMode.Write);
+        sourceStream.CopyTo(cryptoStream);
         
-        using var memoryStream = new MemoryStream();
-        using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
-        {
-            using (var streamWriter = new BinaryWriter(cryptoStream))
-            {
-                streamWriter.Write(byteArray);
-            }
-
-            array = memoryStream.ToArray();
-        }
-        
-        return (array, iv);
+        return iv;
     }
 
-    public byte[] DecryptString(string key, byte[] cipherArray, byte[] iv)
+    public static void Decrypt(string key, byte[] iv, Stream sourceStream, Stream destStream)
     {
         using var aes = Aes.Create();
         aes.Key = Encoding.UTF8.GetBytes(key);
         aes.IV = iv;
-        
-        var decryptor = aes.CreateDecryptor();
 
-        using var memoryStream = new MemoryStream(cipherArray);
-        using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-        using var streamReader = new BinaryReader(cryptoStream);
-        return streamReader.ReadBytes(cipherArray.Length);
+        var decryptor = aes.CreateDecryptor();
+        using var cryptoStream = new CryptoStream(sourceStream, decryptor, CryptoStreamMode.Read);
+        cryptoStream.CopyTo(destStream);
     }
 }
