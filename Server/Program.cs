@@ -1,6 +1,7 @@
 using BlazorAuthenticationLearn.Server;
 using BlazorAuthenticationLearn.Server.Data;
 using BlazorAuthenticationLearn.Server.Models;
+using BlazorAuthenticationLearn.Server.Utilities;
 using BlazorAuthenticationLearn.Shared.Models;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Http.Features;
@@ -13,12 +14,11 @@ using Microsoft.EntityFrameworkCore;
 // TODO: File download and delete need user check
 // TODO: If I do allow file deletions/downloads from other users, the path needs to be pulled from the DB user too
 
-var databaseEnvironment = Environment.GetEnvironmentVariable("BAL_ConnectionString", EnvironmentVariableTarget.User);
+// TODO: Fill site with toasts.
 
-if (databaseEnvironment == null)
-{
-    DatabaseConfiguration.DatabaseInit();
-}
+
+SetupConfiguration.InitConfiguration();
+var configuration = SetupConfiguration.ReadConfiguration();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +33,17 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 // Custom Services
-builder.Services.AddDbContext<PostgresqlDataContext>(options => { options.UseNpgsql(databaseEnvironment!); });
+builder.Services.AddSingleton(configuration);
+
+builder.Services.AddDbContext<PostgresqlDataContext>(
+    options =>
+    {
+        options.UseNpgsql($"Host={configuration.Database.HostName};" +
+                          $"Port={configuration.Database.Port};" +
+                          $"Username={configuration.Database.UserName};" +
+                          $"Password={configuration.Database.Password};" +
+                          $"Database={configuration.Database.Database}");
+    });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<PostgresqlDataContext>();
 builder.Services.ConfigureApplicationCookie(options =>
@@ -52,13 +62,9 @@ builder.Services.Configure<FormOptions>(x =>
     x.MultipartBodyLengthLimit = int.MaxValue;
 });
 
-builder.Services.AddScoped<Configuration>();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddBlazoredToast();
-
 builder.Services.AddHttpClient();
 
 // Generated app builder using above services.

@@ -1,16 +1,11 @@
-﻿using System.Net;
-using BlazorAuthenticationLearn.Server.Utilities;
+﻿using BlazorAuthenticationLearn.Server.Utilities;
 using BlazorAuthenticationLearn.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Text;
 using BlazorAuthenticationLearn.Server.Data;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
-using Syncfusion.Blazor.Data;
 
 namespace BlazorAuthenticationLearn.Server.Controllers;
 
