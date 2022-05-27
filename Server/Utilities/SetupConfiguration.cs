@@ -55,25 +55,24 @@ public static class SetupConfiguration
             Environment.Exit(-1);
         }
 
-        var getConfigVersion = new Configuration().Version;
+        var newConfigVersion = new Configuration().Version;
 
-        if (getConfigVersion > configuration.Version)
+        if (newConfigVersion > configuration.Version)
         {
-            MigrateConfiguration(configuration);
+            MigrateConfiguration(configuration, newConfigVersion);
         }
 
         return configuration;
     }
 
-    private static async void MigrateConfiguration(Configuration configuration)
+    private static async void MigrateConfiguration(Configuration configuration, byte newConfigVersion)
     {
         var workingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         File.Delete(Path.Join(workingDirectory, "GlobalConfiguration.json"));
-        var getNewConfigVersion = new Configuration().Version;
 
         var configPostMig = new Configuration
         {
-            Version = getNewConfigVersion,
+            Version = newConfigVersion,
             DataDirectory = configuration.DataDirectory,
             DataKey = configuration.DataKey,
             Database = configuration.Database
