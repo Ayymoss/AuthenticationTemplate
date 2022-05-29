@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 
 // DONE: File download and delete need user check (renamed as not sure if I want to keep this)
 // DONE: If I do allow file deletions/downloads from other users, the path needs to be pulled from the DB user too
+// Test
 
 SetupConfiguration.InitConfiguration();
 var configuration = SetupConfiguration.ReadConfiguration();
