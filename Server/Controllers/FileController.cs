@@ -26,18 +26,22 @@ public class FileController : ControllerBase
     public async Task<ActionResult<IList<FileContext>>> GetFiles()
     {
         var files = await _context.FileContexts.AsNoTracking()
-            .Select(x => new {x.Id, x.FileName, x.FileSize, x.UploadDate, x.UploaderId, x.UploaderName})
+            .Select(x => new {x.FileNameGuid, x.FileName, x.FileSize, x.UploadDate, x.UploaderName})
             .Where(x => x.UploaderName == User.Identity.Name).ToListAsync();
         return Ok(files);
     }
 
-    [HttpGet("[action]/{id:int}"), Authorize]
-    public async Task<IActionResult> Download(int id)
+    [HttpGet("[action]/{guid}"), Authorize]
+    public async Task<IActionResult> Download(string guid)
     {
-        var file = await _context.FileContexts.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var file = await _context.FileContexts.AsNoTracking().FirstOrDefaultAsync(x => x.FileNameGuid == guid);
         if (file == null)
         {
             return NotFound();
+        }
+        if (file.UploaderName != User.Identity!.Name)
+        {
+            return Unauthorized();
         }
 
         var filename = Path.Join(_configuration.DataDirectory, User.Identity!.Name, file.FileNameGuid);
@@ -45,15 +49,14 @@ public class FileController : ControllerBase
         var ms = new MemoryStream();
         EncryptionDecryption.Decrypt(_configuration.DataKey, file.FileIv, fs, ms);
         ms.Seek(0, SeekOrigin.Begin);
-
         return File(ms, "application/octet-stream", file.FileName);
     }
 
 
-    [HttpDelete("[action]/{id:int}"), Authorize]
-    public async Task<IActionResult> Delete(int id)
+    [HttpDelete("[action]/{guid}"), Authorize]
+    public async Task<IActionResult> Delete(string guid)
     {
-        var file = await _context.FileContexts.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var file = await _context.FileContexts.AsNoTracking().FirstOrDefaultAsync(x => x.FileNameGuid == guid);
         if (file == null)
         {
             return NotFound();
@@ -74,6 +77,12 @@ public class FileController : ControllerBase
         {
             foreach (var file in uploadFiles)
             {
+                // File length check doesn't actually display the error to the user. Can be a bit confusing.
+                if (file.FileName.Length > 128)
+                {
+                    return BadRequest("File name is too long");
+                }
+                
                 var fileGuid = Guid.NewGuid().ToString();
                 var filename = Path.Join(_configuration.DataDirectory, User.Identity!.Name, fileGuid);
 

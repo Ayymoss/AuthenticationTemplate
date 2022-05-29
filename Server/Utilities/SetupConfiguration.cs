@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 using System.Text.Json;
 
 namespace BlazorAuthenticationLearn.Server.Utilities;
@@ -21,13 +22,13 @@ public static class SetupConfiguration
 
         var dbConfig = DatabaseConfiguration.PromptBuildConfig();
         var random = new Random();
-        var dataKey = new string(Enumerable.Repeat("abcdef0123456789", 32)
+        var dataKey = new string(Enumerable.Repeat("abcdefghijklmnopqrstuvwxzy0123456789", 32)
             .Select(s => s[random.Next(s.Length)]).ToArray());
 
         var configuration = new Configuration
         {
             Version = 1,
-            DataDirectory = Path.Join(workingDirectory, "UserDataDump"),
+            DataDirectory = Path.Join(workingDirectory, "UserUploadDirectory"),
             DataKey = dataKey,
             Database = dbConfig
         };
@@ -77,7 +78,7 @@ public static class SetupConfiguration
             DataKey = configuration.DataKey,
             Database = configuration.Database
         };
-        
+
         var fileName = Path.Join(workingDirectory, "GlobalConfiguration.json");
         await using var createStream = File.Create(fileName);
         await JsonSerializer.SerializeAsync(createStream, configPostMig,
