@@ -52,8 +52,8 @@ else
                 }
                 <td>@file.UploaderName</td>
                 <td>
-                    <button @onclick="() => DownloadFile(file.Id)" class="btn btn-primary mx-1">Download</button>
-                    <button @onclick="() => DeleteFile(file.Id)" class="btn btn-danger mx-1">Delete</button>
+                    <a href="api/File/Download/@file.FileNameGuid" class="btn btn-primary" download>Download</a>
+                    <button @onclick="() => DeleteFile(file.FileNameGuid)" class="btn btn-danger mx-1">Delete</button>
                 </td>
             </tr>
         }
@@ -62,7 +62,6 @@ else
 }
 
 @code {
-
     //https://www.c-sharpcorner.com/article/creating-search-feature-in-blazor-server-grid/
     //https://www.daveabrock.com/2021/01/14/blast-off-blazor-search-box/
 
@@ -76,23 +75,15 @@ else
 
     async void SuccessHandler(SuccessEventArgs args) => await OnInitializedAsync();
 
-    async void DeleteFile(int fileId)
+    async void DeleteFile(string fileGuid)
     {
-        var file = FileContext.First(x => x.Id == fileId);
-        if (await Js.InvokeAsync<bool>("confirm", $"Do you want to delete ({file.Id}) {file.FileName}'s Record?"))
+        var file = FileContext.First(x => x.FileNameGuid == fileGuid);
+        if (await Js.InvokeAsync<bool>("confirm", $"Do you want to delete ({file.FileNameGuid}) {file.FileName}'s Record?"))
         {
-            await Http.DeleteAsync($"api/File/Delete/{fileId}");
+            await Http.DeleteAsync($"api/File/Delete/{file.FileNameGuid}");
             await OnInitializedAsync();
         }
     }
-
-    async void DownloadFile(int fileId)
-    {
-        var file = FileContext.First(x => x.Id == fileId);
-        var response = await Http.GetByteArrayAsync($"api/File/Download/{file.Id}");
-        var fileStream = new MemoryStream(response);
-        using var streamRef = new DotNetStreamReference(stream: fileStream);
-        await Js.InvokeVoidAsync("downloadFileFromStream", file.FileName, streamRef);
-    }
-
+    
+    // https://www.thecodehubs.com/sorting-table-in-blazor/
 }

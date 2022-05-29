@@ -9,24 +9,35 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 // TODO: Add Admin Area for Password Resets and User management (Deletions etc)
-// TODO: File Search
 
-// TODO: File download and delete need user check
-// TODO: If I do allow file deletions/downloads from other users, the path needs to be pulled from the DB user too
+// TODO: File Search
+// TODO: Change the "Trash" icon next to uploads.
 
 // TODO: Fill site with toasts.
 
+// DONE: File download and delete need user check (renamed as not sure if I want to keep this)
+// DONE: If I do allow file deletions/downloads from other users, the path needs to be pulled from the DB user too
 
 SetupConfiguration.InitConfiguration();
 var configuration = SetupConfiguration.ReadConfiguration();
 
 var builder = WebApplication.CreateBuilder(args);
 
+#if !DEBUG
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5000);
+    options.ListenAnyIP(5001, configure => configure.UseHttps());
+});
+#endif
+
+#if DEBUG
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenLocalhost(5000);
     options.ListenLocalhost(5001, configure => configure.UseHttps());
 });
+#endif
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
