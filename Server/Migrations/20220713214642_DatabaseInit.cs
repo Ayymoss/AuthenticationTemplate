@@ -193,17 +193,21 @@ namespace BlazorAuthenticationLearn.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "b8fcb14b-a3b0-43cc-9c43-36a12f78a8b6", "d820e8de-f351-4248-9678-93c4367b169e", "SuperAdmin", "SUPERADMIN" });
+                values: new object[,]
+                {
+                    { "973f7253-73e3-48bb-a7d8-21bd37095e24", "cfad6500-c24a-4c37-84f0-2e190d4364a4", "YouTube", "YOUTUBE" },
+                    { "f9d95ad9-1694-484b-9f0a-c80140291d73", "8b5df101-be60-4503-8ee1-359a24078f4c", "SuperAdmin", "SUPERADMIN" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "9b1162fa-242a-45bd-ad09-0fd2e28ed193", 0, "d074b4cd-3329-414a-915f-8eb9e78fc989", "email@example.org", true, false, null, "EMAIL@EXAMPLE.ORG", "SUPERADMIN", "AQAAAAEAACcQAAAAEENBYHZAwGnkYXpn6J7/Z9XStmr2NybLx7vpPzVkZ8PlFAKTh/AOyq6EXZwi8/+dPg==", null, false, "a5930ee8-2381-4551-85d2-e82d317600bd", false, "SuperAdmin" });
+                values: new object[] { "4bb05e70-2869-4781-8a59-d6f7e6cc3cc5", 0, "11769806-0010-4bbb-825c-50680924aa7b", "email@example.org", true, false, null, "EMAIL@EXAMPLE.ORG", "SUPERADMIN", "AQAAAAEAACcQAAAAEJvEwKdJ5V9sya4786VHowe+u5hnSYhXXfoBIfE/CNvVH/myl5LW1Qac75Df+TpGkA==", null, false, "7540b780-e4ae-433e-97af-026d86fcec8c", false, "SuperAdmin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "b8fcb14b-a3b0-43cc-9c43-36a12f78a8b6", "9b1162fa-242a-45bd-ad09-0fd2e28ed193" });
+                values: new object[] { "f9d95ad9-1694-484b-9f0a-c80140291d73", "4bb05e70-2869-4781-8a59-d6f7e6cc3cc5" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

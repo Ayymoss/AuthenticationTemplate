@@ -1,0 +1,55 @@
+﻿@page "/Admin"
+@inject HttpClient Http
+@inject IJSRuntime Js
+@attribute [Authorize(Roles = nameof(RoleName.SuperAdmin))]
+
+<h3>User</h3>
+
+@if (UsersList == null)
+{
+    <text>Loading...</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Guid</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in UsersList)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    <a class="btn btn-success" href="/Admin/Edit/@user.Id">Edit</a>
+                    <button class="btn btn-danger" @onclick="() => Delete(user.Id)">Delete</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@code {
+    ApplicationUser[] UsersList { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        UsersList = await Http.GetFromJsonAsync<ApplicationUser[]>("api/Admin");
+    }
+
+    async Task Delete(string id)
+    {
+        var dev = UsersList.First(x => x.Id == id);
+        if (await Js.InvokeAsync<bool>("confirm", $"Do you want to delete {dev.NormalizedUserName}'s ({dev.Id}) Record?"))
+        {
+            await Http.DeleteAsync($"api/Admin/{id}");
+            await OnInitializedAsync();
+        }
+    }
+}

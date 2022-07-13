@@ -1,5 +1,4 @@
-﻿using BlazorAuthenticationLearn.Server.Models;
-using BlazorAuthenticationLearn.Shared.Models;
+﻿using BlazorAuthenticationLearn.Shared.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -14,30 +13,32 @@ public class PostgresqlDataContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Developer> Developers { get; set; }
     public DbSet<FileContext> FileContexts { get; set; }
-
-    private readonly string _roleGuid = Guid.NewGuid().ToString();
-    private readonly string _roleGuidConStamp = Guid.NewGuid().ToString();
-    private readonly string _userGuid = Guid.NewGuid().ToString();
-    private readonly string _userGuidConStamp = Guid.NewGuid().ToString();
-    private readonly string _userGuidSecStamp = Guid.NewGuid().ToString();
-
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         
         // Build seed for role SuperAdmin
-        var role = new IdentityRole
+        var superAdminRole = new IdentityRole
         {
-            Id = _roleGuid,
+            Id = Guid.NewGuid().ToString(),
             Name = "SuperAdmin",
             NormalizedName = "SUPERADMIN",
-            ConcurrencyStamp = _roleGuidConStamp
+            ConcurrencyStamp = Guid.NewGuid().ToString()
+        };
+        
+        var youTubeRole = new IdentityRole
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "YouTube",
+            NormalizedName = "YOUTUBE",
+            ConcurrencyStamp = Guid.NewGuid().ToString()
         };
 
         // Build seed for user SuperAdmin
-        var user = new ApplicationUser()
+        var superAdminUser = new ApplicationUser()
         {
-            Id = _userGuid,
+            Id = Guid.NewGuid().ToString(),
             UserName = "SuperAdmin",
             NormalizedUserName = "SUPERADMIN",
             Email = "email@example.org",
@@ -46,24 +47,25 @@ public class PostgresqlDataContext : IdentityDbContext<ApplicationUser>
             PhoneNumberConfirmed = false,
             TwoFactorEnabled = false,
             LockoutEnabled = false,
-            ConcurrencyStamp = _userGuidConStamp,
-            SecurityStamp = _userGuidSecStamp
+            ConcurrencyStamp = Guid.NewGuid().ToString(),
+            SecurityStamp = Guid.NewGuid().ToString()
         };
 
         // Generate password hash for user SuperAdmin
         var passwordHasher = new PasswordHasher<ApplicationUser>();
-        user.PasswordHash = passwordHasher.HashPassword(user, "adminsuper");
+        superAdminUser.PasswordHash = passwordHasher.HashPassword(superAdminUser, "adminsuper");
 
         // Seed Role and User
-        builder.Entity<IdentityRole>().HasData(role);
-        builder.Entity<ApplicationUser>().HasData(user);
+        builder.Entity<IdentityRole>().HasData(superAdminRole);
+        builder.Entity<IdentityRole>().HasData(youTubeRole);
+        builder.Entity<ApplicationUser>().HasData(superAdminUser);
 
         // Set user SuperAdmin to role SuperAdmin
         builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
         {
             
-            RoleId = _roleGuid,
-            UserId = _userGuid
+            RoleId = superAdminRole.Id,
+            UserId = superAdminUser.Id
         });
     }
 }

@@ -1,0 +1,41 @@
+﻿@page "/Admin/Edit/{id}"
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+@inject IJSRuntime Js
+@inject CustomStateProvider CustomStateProvider
+@attribute [Authorize(Roles = nameof(RoleName.SuperAdmin))]
+
+<h3>Edit @_user.UserName (@_user.Id)</h3>
+
+<AdminForm ButtonText="Update" User="_user" OnValidSubmit="EditDeveloper"></AdminForm>
+<AdminFormPw ButtonText="Update" PwdReq="_changePasswordRequest" OnValidSubmit="ChangePassword"></AdminFormPw>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    
+    ApplicationUser _user = new();
+    ChangePasswordRequest _changePasswordRequest = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _user = await Http.GetFromJsonAsync<ApplicationUser>($"api/Admin/{Id}");
+    }
+
+    async Task EditDeveloper()
+    {
+        await Http.PutAsJsonAsync("api/Admin", _user);
+        
+        if (_changePasswordRequest != null)
+        {
+            await CustomStateProvider.ChangePassword(_changePasswordRequest);
+        }
+        await Js.InvokeVoidAsync("alert", $"Updated Successfully!"); //replace with toast
+        UriHelper.NavigateTo("Admin");
+    }
+
+    async Task ChangePassword()
+    {
+    }
+}

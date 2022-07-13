@@ -1,6 +1,5 @@
 ﻿using BlazorAuthenticationLearn.Server.Data;
 using BlazorAuthenticationLearn.Shared.Models;
-using BlazorAuthenticationLearn.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

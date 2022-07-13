@@ -32,7 +32,7 @@
 </EditForm>
 
 @code{
-    LoginRequest LoginRequest { get; set; } = new LoginRequest();
+    LoginRequest LoginRequest { get; set; } = new();
     string Error { get; set; }
 
     async Task OnSubmit()

@@ -61,6 +61,11 @@ public class CustomStateProvider : AuthenticationStateProvider
         await _api.ChangePassword(changePasswordRequest);
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
+    public async Task ChangePasswordAdmin(ChangePasswordRequest changePasswordRequest)
+    {
+        await _api.ChangePassword(changePasswordRequest);
+        // TODO: Will not log out the end user on password change! This is a dirty implementation.
+    }
 
     public async Task Register(RegisterRequest registerRequest)
     {

@@ -22,7 +22,7 @@ namespace BlazorAuthenticationLearn.Server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BlazorAuthenticationLearn.Server.Models.ApplicationUser", b =>
+            modelBuilder.Entity("BlazorAuthenticationLearn.Shared.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -88,17 +88,17 @@ namespace BlazorAuthenticationLearn.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9b1162fa-242a-45bd-ad09-0fd2e28ed193",
+                            Id = "4bb05e70-2869-4781-8a59-d6f7e6cc3cc5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d074b4cd-3329-414a-915f-8eb9e78fc989",
+                            ConcurrencyStamp = "11769806-0010-4bbb-825c-50680924aa7b",
                             Email = "email@example.org",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "EMAIL@EXAMPLE.ORG",
                             NormalizedUserName = "SUPERADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEENBYHZAwGnkYXpn6J7/Z9XStmr2NybLx7vpPzVkZ8PlFAKTh/AOyq6EXZwi8/+dPg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJvEwKdJ5V9sya4786VHowe+u5hnSYhXXfoBIfE/CNvVH/myl5LW1Qac75Df+TpGkA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a5930ee8-2381-4551-85d2-e82d317600bd",
+                            SecurityStamp = "7540b780-e4ae-433e-97af-026d86fcec8c",
                             TwoFactorEnabled = false,
                             UserName = "SuperAdmin"
                         });
@@ -191,10 +191,17 @@ namespace BlazorAuthenticationLearn.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b8fcb14b-a3b0-43cc-9c43-36a12f78a8b6",
-                            ConcurrencyStamp = "d820e8de-f351-4248-9678-93c4367b169e",
+                            Id = "f9d95ad9-1694-484b-9f0a-c80140291d73",
+                            ConcurrencyStamp = "8b5df101-be60-4503-8ee1-359a24078f4c",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
+                        },
+                        new
+                        {
+                            Id = "973f7253-73e3-48bb-a7d8-21bd37095e24",
+                            ConcurrencyStamp = "cfad6500-c24a-4c37-84f0-2e190d4364a4",
+                            Name = "YouTube",
+                            NormalizedName = "YOUTUBE"
                         });
                 });
 
@@ -287,8 +294,8 @@ namespace BlazorAuthenticationLearn.Server.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "9b1162fa-242a-45bd-ad09-0fd2e28ed193",
-                            RoleId = "b8fcb14b-a3b0-43cc-9c43-36a12f78a8b6"
+                            UserId = "4bb05e70-2869-4781-8a59-d6f7e6cc3cc5",
+                            RoleId = "f9d95ad9-1694-484b-9f0a-c80140291d73"
                         });
                 });
 
@@ -322,7 +329,7 @@ namespace BlazorAuthenticationLearn.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BlazorAuthenticationLearn.Server.Models.ApplicationUser", null)
+                    b.HasOne("BlazorAuthenticationLearn.Shared.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -331,7 +338,7 @@ namespace BlazorAuthenticationLearn.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BlazorAuthenticationLearn.Server.Models.ApplicationUser", null)
+                    b.HasOne("BlazorAuthenticationLearn.Shared.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -346,7 +353,7 @@ namespace BlazorAuthenticationLearn.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazorAuthenticationLearn.Server.Models.ApplicationUser", null)
+                    b.HasOne("BlazorAuthenticationLearn.Shared.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -355,7 +362,7 @@ namespace BlazorAuthenticationLearn.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BlazorAuthenticationLearn.Server.Models.ApplicationUser", null)
+                    b.HasOne("BlazorAuthenticationLearn.Shared.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -1,0 +1,61 @@
+﻿@page "/YouTubeDownload"
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+@attribute [Authorize(Roles = nameof(RoleName.YouTube))]
+
+<h3>Download YouTube Videos</h3>
+
+<EditForm class="form-signin" OnValidSubmit="OnSubmit" Model="YouTubeRequest">
+    <DataAnnotationsValidator/>
+
+    <div class="form-label">
+        <label for="youTubeURL" class="required">YouTube URL</label>
+        <InputText id="youTubeURL" class="form-control" @bind-Value="YouTubeRequest.Url" autofocus placeholder="YouTube URL"/>
+    </div>
+    
+    <ValidationSummary/>
+
+    <div>
+        <button class="btn btn-primary" type="submit">Process</button>
+    </div>
+    
+    @if (_currentState != string.Empty)
+    {
+        <h3>State: @_currentState</h3>
+    }
+    @if (_complete)
+    {
+        <a href="api/YouTube/Download?filename=@YouTubeRequest.Filename" class="btn btn-primary" download>Download</a>
+    }
+    
+</EditForm>
+
+@code {
+    // Need URL submit box
+    // after download completes insta href to video
+    // add 
+    
+    private YouTubeRequest YouTubeRequest = new();
+    
+
+    string _currentState = string.Empty;
+    bool _complete;
+    async void OnSubmit()
+    {
+        _currentState = "Processing request. Do not leave this page.";
+        var result = await Http.PostAsJsonAsync("api/YouTube/Process", YouTubeRequest);
+        switch (result.IsSuccessStatusCode)
+        {
+            case false:
+                _currentState = "Error downloading video.";
+                StateHasChanged();
+                break;
+            case true:
+                YouTubeRequest.Filename = await result.Content.ReadAsStringAsync();
+                _currentState = "Download complete. Click download.";
+                _complete = true;
+                StateHasChanged();
+                break;
+        }
+    }
+}
